@@ -37,4 +37,7 @@ program main
   call now(finish)
   elapsed = finish - start
   print *, "Elapsed time: ", elapsed, "seconds."
+  deallocate(array)
+  deallocate(WORK)
+  deallocate(IPIV)
 end program main

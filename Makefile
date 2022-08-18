@@ -1,6 +1,6 @@
 include Makefile.in
 
-TARGETS=matinv example
+TARGETS=matinv example cmateig
 MODULES=modules
 
 .PHONY: all clean test $(TARGETS) $(MODULES)

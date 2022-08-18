@@ -32,7 +32,7 @@ program main
   array = matmul(transpose(array), array)
 
   call dgetrf ( array_size, array_size, array, LDA, IPIV, INFO )
-  ! call dgetri ( array_size, array, LDA, IPIV, WORK, LWORK, INFO )
+  call dgetri ( array_size, array, LDA, IPIV, WORK, LWORK, INFO )
   
   call now(finish)
   elapsed = finish - start

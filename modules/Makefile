@@ -14,4 +14,4 @@ $(OBJS): %.o : %.f90
 	$(FC) $(CPPFLAGS) -o $@ -c $^
 
 clean:
-	rm -f libmodules.a
+	rm -f libmodules.a $(OBJS)

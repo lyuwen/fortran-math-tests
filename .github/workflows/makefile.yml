@@ -1,0 +1,28 @@
+name: Makefile CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Install dependencies
+      run: |
+        sudo apt update
+        sudo apt install gcc libblas-dev liblapack-dev make
+      
+    - name: Install dependencies
+      run: |
+        ln -s arch/Makefile.in.gnu Makefile.in
+        make all
+      
+    - name: Run tests
+      run: make test

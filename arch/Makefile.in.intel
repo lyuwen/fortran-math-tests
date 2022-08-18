@@ -1,6 +1,6 @@
 # FORT=gfortran
-FORT=ifort
-PPFLAGS= -cpp
+FC=ifort
+CPPFLAGS= -cpp
 
 # LDFLAGS= -llapack -lblas # lapack
 LDFLAGS= -qmkl # intel MKL

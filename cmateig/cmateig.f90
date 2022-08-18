@@ -8,6 +8,7 @@ program main
   INTEGER,PARAMETER :: array_size = 1000
 #endif
   COMPLEX(dp), ALLOCATABLE :: array(:, :)
+  COMPLEX(dp), ALLOCATABLE :: ctemp(:, :)
   REAL(dp), ALLOCATABLE :: temp(:, :)
   REAL elapsed, start, finish
   INTEGER :: LDA, LWORK, INFO, LRWORK, LIWORK
@@ -28,7 +29,11 @@ program main
   array = array + temp * CMPLX(1.0, 0.0)
   call random_number(temp)
   array = array + temp * CMPLX(0.0, 1.0)
-  array = (array + CONJG(TRANSPOSE(array))) * 50d0
+  deallocate(temp)
+  allocate(ctemp(array_size, array_size))
+  ctemp = TRANSPOSE(array)
+  array = (array + CONJG(ctemp)) * 50d0
+  deallocate(ctemp)
   print *, "first element: ", array(1, 1)
   print *, "(1, 2) element: ", array(1, 2)
 
@@ -56,7 +61,7 @@ program main
   deallocate(WORK)
   deallocate(IWORK)
   deallocate(RWORK)
-  
+
   call now(finish)
   elapsed = finish - start
   print *, "Elapsed time: ", elapsed, "seconds."

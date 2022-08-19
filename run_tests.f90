@@ -13,7 +13,6 @@ program main
 
   print *, "Testing matinv:"
   DO i = 1, size(array_sizes)
-    print *, array_sizes(i)
     totaltime = 0
     DO j = 1, loop
       singletime = 0
@@ -25,7 +24,6 @@ program main
 
   print *, "Testing cmateig:"
   DO i = 1, size(array_sizes)
-    print *, array_sizes(i)
     totaltime = 0
     DO j = 1, loop
       singletime = 0

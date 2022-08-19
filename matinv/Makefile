@@ -23,4 +23,4 @@ test-$(BASE): $(BASE)-10 $(BASE)-100 $(BASE)-1000
 	./$(BASE)-1000
 
 clean:
-	rm -vf $(BASE)-10 $(BASE)-100 $(BASE)-1000
+	rm -vf $(BASE)-10 $(BASE)-100 $(BASE)-1000 $(BASE).o

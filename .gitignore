@@ -33,3 +33,4 @@
 
 # Makefile.in symlink
 Makefile.in
+run_tests

@@ -11,4 +11,4 @@ test: lapack_examples_test
 	./$<
 
 clean:
-	rm -f lapack_examples_test
+	rm -vf lapack_examples_test

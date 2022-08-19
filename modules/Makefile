@@ -11,7 +11,7 @@ libmodules.a: $(OBJS)
 	$(AR) r $@ $^
 
 $(OBJS): %.o : %.f90
-	$(FC) $(CPPFLAGS) -o $@ -c $^
+	$(FC) $(CPPFLAGS) $(FFLAGS) -o $@ -c $^
 
 clean:
 	rm -vf libmodules.a $(OBJS)

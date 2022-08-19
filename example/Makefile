@@ -5,7 +5,7 @@ include ../Makefile.in
 all: lapack_examples_test
 
 lapack_examples_test: lapack_examples_test.o
-	$(FC) -o $@ $^ $(LDFLAGS) $(LIBS)
+	$(LD) -o $@ $^ $(LDFLAGS) $(LIBS)
 
 %.o: %.f
 	$(FC) $(CPPFLAGS) $(FFLAGS) -o $@ -c $^

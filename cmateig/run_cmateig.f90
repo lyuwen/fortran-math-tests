@@ -8,6 +8,6 @@ program main
 #endif
   REAL :: elapsed
 
-  call cmateig(array_size, elapsed)
+  call cmateig(array_size, elapsed, 0)
 
 end program main

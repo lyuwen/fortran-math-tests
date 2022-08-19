@@ -8,8 +8,8 @@ all: $(BASE)-10 $(BASE)-100 $(BASE)-1000
 
 test: test-$(BASE)
 
-$(BASE)-%: $(BASE).o
-	$(FC) $(CPPFLAGS) -DARRSIZE=$* $(FFLAGS) -o $@ run_$(BASE).f90 $^ $(LDFLAGS) $(LIBS)
+$(BASE)-%: run_$(BASE).f90 $(BASE).o
+	$(FC) $(CPPFLAGS) -DARRSIZE=$* $(FFLAGS) -o $@ $^ $(LDFLAGS) $(LIBS)
 
 %.o: %.f90
 	$(FC) $(FFLAGS) -o $@ -c $^

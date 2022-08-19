@@ -8,6 +8,6 @@ program main
 #endif
   REAL :: elapsed
 
-  call matinv(array_size, elapsed)
+  call matinv(array_size, elapsed, 0)
 
 end program main

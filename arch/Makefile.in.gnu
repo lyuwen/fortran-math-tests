@@ -6,3 +6,5 @@ LDFLAGS+= ../modules/libmodules.a
 FFLAGS= -g -O3
 
 AR=ar
+
+.PRECIOUS: %.o

@@ -1,16 +1,13 @@
-program main
+subroutine cmateig(array_size, elapsed)
   IMPLICIT NONE
   INTEGER,PARAMETER :: dp=kind(1.d0)
   INTEGER :: seed
-#ifdef ARRSIZE
-  INTEGER,PARAMETER :: array_size = ARRSIZE
-#else
-  INTEGER,PARAMETER :: array_size = 1000
-#endif
+  INTEGER,INTENT(IN) :: array_size
+  REAL,INTENT(OUT) :: elapsed
   COMPLEX(dp), ALLOCATABLE :: array(:, :)
   COMPLEX(dp), ALLOCATABLE :: ctemp(:, :)
   REAL(dp), ALLOCATABLE :: temp(:, :)
-  REAL elapsed, start, finish
+  REAL :: start, finish
   INTEGER :: LDA, LWORK, INFO, LRWORK, LIWORK
   INTEGER, ALLOCATABLE :: IWORK(:)
   COMPLEX(dp), ALLOCATABLE :: WORK(:)
@@ -64,7 +61,7 @@ program main
 
   call now(finish)
   elapsed = finish - start
-  print *, "Elapsed time: ", elapsed, "seconds."
+  call report_elapsed(elapsed)
   deallocate(array)
   deallocate(W)
-end program main
+end subroutine cmateig

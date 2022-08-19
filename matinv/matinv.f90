@@ -1,14 +1,11 @@
-program main
+subroutine matinv(array_size, elapsed)
   IMPLICIT NONE
   INTEGER,PARAMETER :: dp=kind(1.d0)
   INTEGER :: seed
-#ifdef ARRSIZE
-  INTEGER,PARAMETER :: array_size = ARRSIZE
-#else
-  INTEGER,PARAMETER :: array_size = 1000
-#endif
+  INTEGER,INTENT(IN) :: array_size
+  REAL,INTENT(OUT) :: elapsed
   REAL(dp), ALLOCATABLE :: array(:, :)
-  REAL elapsed, start, finish
+  REAL :: start, finish
   INTEGER :: LDA, LWORK, INFO
   INTEGER, ALLOCATABLE :: IPIV(:)
   REAL(dp), ALLOCATABLE :: WORK(:)
@@ -36,8 +33,8 @@ program main
   
   call now(finish)
   elapsed = finish - start
-  print *, "Elapsed time: ", elapsed, "seconds."
+  call report_elapsed(elapsed)
   deallocate(array)
   deallocate(WORK)
   deallocate(IPIV)
-end program main
+end subroutine matinv

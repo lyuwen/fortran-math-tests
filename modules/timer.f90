@@ -10,3 +10,11 @@ subroutine now(time)
   time = values(7) + time * 60.0
   time = real(values(8)) / 1000.0 + time
 end subroutine now
+
+
+subroutine report_elapsed(elapsed)
+  implicit none
+  real, intent(in) :: elapsed
+
+  print *, "Elapsed elapsed: ", elapsed, "seconds."
+end subroutine report_elapsed

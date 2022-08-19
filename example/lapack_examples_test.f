@@ -59,7 +59,7 @@ c
       call timestamp ( )
 
       call now(finish)
-      print *, "Elapsed time: ", finish - start, " seconds."
+      call report_elapsed(finish - start)
 
       stop 0
       end

@@ -8,8 +8,11 @@ all: $(BASE)-10 $(BASE)-100 $(BASE)-1000
 
 test: test-$(BASE)
 
-$(BASE)-%: $(BASE).f90
-	$(FC) $(CPPFLAGS) -DARRSIZE=$* $(FFLAGS) -o $@ $^ $(LDFLAGS)
+$(BASE)-%: $(BASE).o
+	$(FC) $(CPPFLAGS) -DARRSIZE=$* $(FFLAGS) -o $@ run_$(BASE).f90 $^ $(LDFLAGS)
+
+%.o: %.f90
+	$(FC) $(FFLAGS) -o $@ -c $^
 
 test-$(BASE): $(BASE)-10 $(BASE)-100 $(BASE)-1000
 	@echo Run $(BASE)-10

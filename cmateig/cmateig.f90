@@ -1,9 +1,11 @@
-subroutine cmateig(array_size, elapsed)
+subroutine cmateig(array_size, elapsed, iquiet)
   IMPLICIT NONE
   INTEGER,PARAMETER :: dp=kind(1.d0)
   INTEGER :: seed
   INTEGER,INTENT(IN) :: array_size
   REAL,INTENT(OUT) :: elapsed
+  INTEGER,OPTIONAL :: iquiet
+  INTEGER :: quiet
   COMPLEX(dp), ALLOCATABLE :: array(:, :)
   COMPLEX(dp), ALLOCATABLE :: ctemp(:, :)
   REAL(dp), ALLOCATABLE :: temp(:, :)
@@ -13,8 +15,16 @@ subroutine cmateig(array_size, elapsed)
   COMPLEX(dp), ALLOCATABLE :: WORK(:)
   REAL(dp), ALLOCATABLE :: W(:), RWORK(:)
   !
+  if(present(iquiet))then
+    quiet = iquiet
+  else
+    quiet = 0
+  endif
+  !
   call now(start)
-  print *, "array size: ", array_size
+  if (quiet == 0) then
+    print *, "array size: ", array_size
+  end if
   allocate(array(array_size, array_size))
   allocate(W(array_size))
 
@@ -31,8 +41,10 @@ subroutine cmateig(array_size, elapsed)
   ctemp = TRANSPOSE(array)
   array = (array + CONJG(ctemp)) * 50d0
   deallocate(ctemp)
-  print *, "first element: ", array(1, 1)
-  print *, "(1, 2) element: ", array(1, 2)
+  if (quiet == 0) then
+    print *, "first element: ", array(1, 1)
+    print *, "(1, 2) element: ", array(1, 2)
+  end if
 
   ! Get optimal worker array size
   LWORK = -1
@@ -49,7 +61,9 @@ subroutine cmateig(array_size, elapsed)
   deallocate(IWORK)
   deallocate(RWORK)
 
-  print *, "Optimal worker array size: ", "LWORK = ", LWORK, ", LIWORK = ", LIWORK, ", LRWORK = ", LRWORK
+  if (quiet == 0) then
+    print *, "Optimal worker array size: ", "LWORK = ", LWORK, ", LIWORK = ", LIWORK, ", LRWORK = ", LRWORK
+  end if
 
   allocate(WORK(LWORK))
   allocate(IWORK(LIWORK))
@@ -61,7 +75,9 @@ subroutine cmateig(array_size, elapsed)
 
   call now(finish)
   elapsed = finish - start
-  call report_elapsed(elapsed)
+  if (quiet == 0) then
+    call report_elapsed(elapsed)
+  end if
   deallocate(array)
   deallocate(W)
 end subroutine cmateig

@@ -1,17 +1,27 @@
-subroutine matinv(array_size, elapsed)
+subroutine matinv(array_size, elapsed, iquiet)
   IMPLICIT NONE
   INTEGER,PARAMETER :: dp=kind(1.d0)
   INTEGER :: seed
   INTEGER,INTENT(IN) :: array_size
   REAL,INTENT(OUT) :: elapsed
+  INTEGER,OPTIONAL :: iquiet
+  INTEGER :: quiet
   REAL(dp), ALLOCATABLE :: array(:, :)
   REAL :: start, finish
   INTEGER :: LDA, LWORK, INFO
   INTEGER, ALLOCATABLE :: IPIV(:)
   REAL(dp), ALLOCATABLE :: WORK(:)
   !
+  if(present(iquiet))then
+    quiet = iquiet
+  else
+    quiet = 0
+  endif
+  !
   call now(start)
-  print *, "array size: ", array_size
+  if (quiet == 0) then
+    print *, "array size: ", array_size
+  end if
   allocate(array(array_size, array_size))
   LDA = array_size
   LWORK = LDA * LDA
@@ -24,7 +34,9 @@ subroutine matinv(array_size, elapsed)
   call random_seed(seed)
   call random_number(array)
   array = array * 100d0
-  print *, "first element: ", array(1, 1)
+  if (quiet == 0) then
+    print *, "first element: ", array(1, 1)
+  end if
   ! array = matmul(array, transpose(array))
   array = matmul(transpose(array), array)
 
@@ -33,7 +45,9 @@ subroutine matinv(array_size, elapsed)
   
   call now(finish)
   elapsed = finish - start
-  call report_elapsed(elapsed)
+  if (quiet == 0) then
+    call report_elapsed(elapsed)
+  end if
   deallocate(array)
   deallocate(WORK)
   deallocate(IPIV)

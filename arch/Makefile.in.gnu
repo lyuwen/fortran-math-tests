@@ -1,4 +1,5 @@
 FC=gfortran
+LD=$(FC)
 CPPFLAGS= -cpp
 
 LDFLAGS= -llapack -lblas # lapack

@@ -1,4 +1,5 @@
 FC=ifort
+LD=$(FC)
 CPPFLAGS= -cpp
 
 LDFLAGS= -qmkl # intel MKL

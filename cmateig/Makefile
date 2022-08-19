@@ -8,11 +8,14 @@ all: $(BASE)-10 $(BASE)-100 $(BASE)-1000
 
 test: test-$(BASE)
 
-$(BASE)-%: run_$(BASE).f90 $(BASE).o
-	$(FC) $(CPPFLAGS) -DARRSIZE=$* $(FFLAGS) -o $@ $^ $(LDFLAGS) $(LIBS)
+$(BASE)-%: run_$(BASE)_%.o $(BASE).o
+	$(LD) $(FFLAGS) -o $@ $^ $(LDFLAGS) $(LIBS)
+
+run_$(BASE)_%.o: run_$(BASE).f90
+	$(FC) $(CPPFLAGS) -DARRSIZE=$*  $(FFLAGS) -o $@ -c $^
 
 %.o: %.f90
-	$(FC) $(FFLAGS) -o $@ -c $^
+	$(FC) $(CPPFLAGS) $(FFLAGS) -o $@ -c $^
 
 test-$(BASE): $(BASE)-10 $(BASE)-100 $(BASE)-1000
 	@echo Run $(BASE)-10
@@ -23,4 +26,4 @@ test-$(BASE): $(BASE)-10 $(BASE)-100 $(BASE)-1000
 	./$(BASE)-1000
 
 clean:
-	rm -vf $(BASE)-10 $(BASE)-100 $(BASE)-1000 $(BASE).o
+	rm -vf $(BASE)-10 $(BASE)-100 $(BASE)-1000 $(BASE).o run_$(BASE)_*.o

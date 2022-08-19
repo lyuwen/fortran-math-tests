@@ -20,13 +20,13 @@ test: run_tests
 OBJS = matinv/matinv.o cmateig/cmateig.o
 LIBS = modules/libmodules.a
 
-run_tests: run_tests.f90 $(OBJS) $(LIBS)
-	$(FC) $(CPPFLAGS) $(FFLAGS) -o $@ $^ $(LDFLAGS)
+run_tests: run_tests.o $(OBJS) $(LIBS)
+	$(LD) $(FFLAGS) -o $@ $^ $(LDFLAGS)
 
 $(LIBS): $(MODULES)
 
 %.o: %.f90
-	$(FC) $(FFLAGS) -o $@ -c $^
+	$(FC) $(CPPFLAGS) $(FFLAGS) -o $@ -c $^
 
 $(TARGETS): %: $(MODULES)
 

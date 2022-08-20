@@ -30,15 +30,10 @@ subroutine matinv(array_size, elapsed, iquiet)
   IPIV(:) = 0
   WORK(:) = 0d0
 
-  seed = 0
-  call random_seed(seed)
-  call random_number(array)
-  array = array * 100d0
+  call get_random_double_invertable_array(array_size, array)
   if (quiet == 0) then
     print *, "first element: ", array(1, 1)
   end if
-  ! array = matmul(array, transpose(array))
-  array = matmul(transpose(array), array)
 
   call dgetrf ( array_size, array_size, array, LDA, IPIV, INFO )
   call dgetri ( array_size, array, LDA, IPIV, WORK, LWORK, INFO )

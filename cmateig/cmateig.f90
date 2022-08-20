@@ -7,8 +7,6 @@ subroutine cmateig(array_size, elapsed, iquiet)
   INTEGER,OPTIONAL :: iquiet
   INTEGER :: quiet
   COMPLEX(dp), ALLOCATABLE :: array(:, :)
-  COMPLEX(dp), ALLOCATABLE :: ctemp(:, :)
-  REAL(dp), ALLOCATABLE :: temp(:, :)
   REAL :: start, finish
   INTEGER :: LDA, LWORK, INFO, LRWORK, LIWORK
   INTEGER, ALLOCATABLE :: IWORK(:)
@@ -28,19 +26,7 @@ subroutine cmateig(array_size, elapsed, iquiet)
   allocate(array(array_size, array_size))
   allocate(W(array_size))
 
-  seed = 0
-  call random_seed(seed)
-  allocate(temp(array_size, array_size))
-  call random_number(temp)
-  array(:, :) = 0
-  array = array + temp * CMPLX(1.0, 0.0)
-  call random_number(temp)
-  array = array + temp * CMPLX(0.0, 1.0)
-  deallocate(temp)
-  allocate(ctemp(array_size, array_size))
-  ctemp = TRANSPOSE(array)
-  array = (array + CONJG(ctemp)) * 50d0
-  deallocate(ctemp)
+  call get_random_complex_hermitian_array(array_size, array)
   if (quiet == 0) then
     print *, "first element: ", array(1, 1)
     print *, "(1, 2) element: ", array(1, 2)

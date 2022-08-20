@@ -9,7 +9,7 @@ subroutine get_random_double_invertable_array(array_size, array)
   INTEGER :: seed
   INTEGER,INTENT(IN) :: array_size
   REAL(dp), INTENT(INOUT) :: array(array_size, array_size)
-#ifdef USE_BLAS
+#ifdef USE_DGEMM
   REAL(dp) :: temp(array_size, array_size)
 #endif
   INTEGER :: M,N,P
@@ -19,7 +19,7 @@ subroutine get_random_double_invertable_array(array_size, array)
   seed = 0
   call random_seed(seed)
   call random_number(array)
-#ifdef USE_BLAS
+#ifdef USE_DGEMM
   CALL DGEMM('N','N',array_size,array_size,array_size,ALPHA,transpose(array),array_size,array,array_size,BETA,temp,array_size)
   array = temp / array_size * 100
 #else

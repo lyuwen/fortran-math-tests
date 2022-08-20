@@ -1,6 +1,6 @@
 FC=gfortran
 LD=$(FC)
-CPPFLAGS= -cpp -DUSE_BLAS
+CPPFLAGS= -cpp -DUSE_DGEMM
 
 LDFLAGS= -llapack -lblas # lapack
 LIBS= ../modules/libmodules.a

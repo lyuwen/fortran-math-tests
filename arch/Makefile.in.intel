@@ -1,6 +1,6 @@
 FC=ifort
 LD=$(FC)
-CPPFLAGS= -cpp -DUSE_BLAS
+CPPFLAGS= -cpp -DUSE_DGEMM
 
 LDFLAGS= -qmkl # intel MKL
 LIBS+= ../modules/libmodules.a

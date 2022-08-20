@@ -9,7 +9,7 @@ all: $(BASE)-10 $(BASE)-100 $(BASE)-1000
 test: test-$(BASE)
 
 $(BASE)-%: run_$(BASE)_%.o $(BASE).o
-	$(LD) $(FFLAGS) -o $@ $^ $(LDFLAGS) $(LIBS)
+	$(LD) $(FFLAGS) -o $@ $^ $(LIBS) $(LDFLAGS)
 
 run_$(BASE)_%.o: run_$(BASE).f90
 	$(FC) $(CPPFLAGS) -DARRSIZE=$*  $(FFLAGS) -o $@ -c $^

@@ -34,3 +34,6 @@
 # Makefile.in symlink
 Makefile.in
 run_tests
+
+# macOS
+.DS_Store

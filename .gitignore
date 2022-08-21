@@ -37,3 +37,9 @@ run_tests
 
 # macOS
 .DS_Store
+
+# Autoconf
+config.log
+config.status
+aclocal.m4
+autom4te.cache

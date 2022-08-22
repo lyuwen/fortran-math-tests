@@ -1,0 +1,11 @@
+FC=@FC@
+LD=@LD@
+CPPFLAGS= -cpp -DUSE_DGEMM @CPPFLAGS@
+#
+LDFLAGS=@LDFLAGS@ @LAPACK_LIBS@ @BLAS_LIBS@ @FLIBS@
+LIBS= ../modules/libmodules.a
+FFLAGS= @FFLAGS@
+#
+AR=@AR@
+
+.PRECIOUS: %.o

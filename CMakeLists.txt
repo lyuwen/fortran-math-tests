@@ -20,8 +20,15 @@ if(NOT CMAKE_BUILD_TYPE)
 endif()
 
 set(CMAKE_CXX_FLAGS "-Wall -Wextra")
-set(CMAKE_CXX_FLAGS_DEBUG "-g")
-set(CMAKE_CXX_FLAGS_RELEASE "-O3")
+set(CMAKE_Fortran_FLAGS_DEBUG "-g")
+set(CMAKE_Fortran_FLAGS_RELEASE "-O3")
+
+include(CheckFortranCompilerFlag)
+check_fortran_compiler_flag("-heap-arrays" FHEAPARRAYS)
+if(${FHEAPARRAYS})
+  message(STATUS "Compiler flag -heap-arrays is supported.")
+  set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -heap-arrays")
+endif()
 
 # Lapack Package
 find_package(BLAS REQUIRED)
@@ -31,7 +38,17 @@ set (CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${BLAS_LINKER_FLAGS}")
 find_package(LAPACK REQUIRED)
 set (CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${LAPACK_LINKER_FLAGS}")
 
-add_compile_definitions(USE_DGEMM)
+
+if(${CMAKE_VERSION} VERSION_LESS "3.18.0")
+  message(WARNING "CMake version before Fortran_PREPROCESS is introduced.")
+  add_compile_options(-cpp)
+else()
+  set_source_files_properties(
+    run_tests.f90 cmateig/cmateig.f90 matinv/matinv.f90
+    PROPERTIES Fortran_PREPROCESS ON
+    )
+endif()
+
 add_compile_definitions(LOOP=10)
 
 message(STATUS "Add libmodules.a subdirectory.")
@@ -48,11 +65,6 @@ add_executable(run_tests
 include(CTest)
 add_test(NAME Run_Tests
          COMMAND run_tests)
-
-set_source_files_properties(
-  run_tests.f90 cmateig/cmateig.f90 matinv/matinv.f90
-  PROPERTIES Fortran_PREPROCESS ON
-  )
 
 
 target_link_libraries(run_tests PRIVATE "${BLAS_LIBRARIES}" "${LAPACK_LIBRARIES}" modules)

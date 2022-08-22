@@ -15,14 +15,30 @@ if(PROJECT_SOURCE_DIR STREQUAL PROJECT_BINARY_DIR)
   )
 endif()
 
+set(CMAKE_CXX_FLAGS "-Wall -Wextra")
+set(CMAKE_Fortran_FLAGS_DEBUG "-g")
+set(CMAKE_Fortran_FLAGS_RELEASE "-O3")
+
+include(CheckFortranCompilerFlag)
+check_fortran_compiler_flag("-heap-arrays" FHEAPARRAYS)
+if(${FHEAPARRAYS})
+  message(STATUS "Compiler flag -heap-arrays is supported.")
+  set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -heap-arrays")
+endif()
+
+if(${CMAKE_VERSION} VERSION_LESS "3.18.0")
+  add_compile_options("-cpp")
+else()
+  set_source_files_properties(
+              random.f90 timer.f90
+    PROPERTIES Fortran_PREPROCESS ON
+    )
+endif()
+add_compile_definitions(USE_DGEMM)
+
 add_library(modules STATIC
             random.f90 timer.f90
             )
-set_source_files_properties(
-            random.f90 timer.f90
-  PROPERTIES Fortran_PREPROCESS ON
-  )
-
 
 file(RELATIVE_PATH rel ${CMAKE_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR})
 if (rel STREQUAL "")

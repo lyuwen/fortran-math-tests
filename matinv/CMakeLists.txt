@@ -23,8 +23,15 @@ if(NOT CMAKE_BUILD_TYPE)
 endif()
 
 set(CMAKE_CXX_FLAGS "-Wall -Wextra")
-set(CMAKE_CXX_FLAGS_DEBUG "-g")
-set(CMAKE_CXX_FLAGS_RELEASE "-O3")
+set(CMAKE_Fortran_FLAGS_DEBUG "-g")
+set(CMAKE_Fortran_FLAGS_RELEASE "-O3")
+
+include(CheckFortranCompilerFlag)
+check_fortran_compiler_flag("-heap-arrays" FHEAPARRAYS)
+if(${FHEAPARRAYS})
+  message(STATUS "Compiler flag -heap-arrays is supported.")
+  set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -heap-arrays")
+endif()
 
 # Lapack Package
 find_package(BLAS REQUIRED)
@@ -37,6 +44,15 @@ set (CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${LAPACK_LINKER_FLAGS}")
 if (NOT TARGET modules)
   message(STATUS "Add libmodules.a subdirectory.")
   add_subdirectory(../modules modules EXCLUDE_FROM_ALL)
+endif()
+
+if(${CMAKE_VERSION} VERSION_LESS "3.18.0")
+  add_compile_options("-cpp")
+else()
+  set_source_files_properties(
+    run_${base_name}.f90 ${base_name}.f90
+    PROPERTIES Fortran_PREPROCESS ON
+    )
 endif()
 
 list(APPEND ARRSIZES 10 100 1000)
@@ -53,11 +69,6 @@ foreach(arrsize IN LISTS ARRSIZES)
 endforeach()
 
 message(STATUS "Targets to build = ${EXETARGETS}")
-
-set_source_files_properties(
-  run_${base_name}.f90 ${base_name}.f90
-  PROPERTIES Fortran_PREPROCESS ON
-  )
 
 file(RELATIVE_PATH rel ${CMAKE_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR})
 if (rel STREQUAL "")

@@ -29,6 +29,11 @@ if(${FHEAPARRAYS})
   message(STATUS "Compiler flag -heap-arrays is supported.")
   set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -heap-arrays")
 endif()
+check_fortran_compiler_flag("-no-wrap-margin" FNOWRAPMARGIN)
+if(${FNOWRAPMARGIN})
+  message(STATUS "Compiler flag -no-wrap-margin is supported.")
+  set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -no-wrap-margin")
+endif()
 
 # Lapack Package
 find_package(BLAS REQUIRED)

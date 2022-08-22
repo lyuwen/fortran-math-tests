@@ -34,9 +34,12 @@ set (CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${LAPACK_LINKER_FLAGS}")
 add_compile_definitions(USE_DGEMM)
 add_compile_definitions(LOOP=10)
 
+message(STATUS "Add libmodules.a subdirectory.")
 add_subdirectory(modules)
-# add_library(modules/libmodules STATIC
-#             modules/random.f90 modules/timer.f90)
+message(STATUS "Add cmateig subdirectory.")
+add_subdirectory(cmateig)
+message(STATUS "Add matinv subdirectory.")
+add_subdirectory(matinv)
 
 add_executable(run_tests
   run_tests.f90 cmateig/cmateig.f90 matinv/matinv.f90

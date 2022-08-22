@@ -34,7 +34,10 @@ set (CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${BLAS_LINKER_FLAGS}")
 find_package(LAPACK REQUIRED)
 set (CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${LAPACK_LINKER_FLAGS}")
 
-add_subdirectory(../modules modules EXCLUDE_FROM_ALL)
+if (NOT TARGET modules)
+  message(STATUS "Add libmodules.a subdirectory.")
+  add_subdirectory(../modules modules EXCLUDE_FROM_ALL)
+endif()
 
 list(APPEND ARRSIZES 10 100 1000)
 foreach(arrsize IN LISTS ARRSIZES)

@@ -1,6 +1,6 @@
 include Makefile.in
 
-TARGETS=matinv example cmateig
+TARGETS=matinv example cmateig dmatmul
 MODULES=modules
 
 .PHONY: all clean test test-all $(TARGETS) $(MODULES)
@@ -17,7 +17,7 @@ test-all: test
 test: run_tests
 	./$<
 
-OBJS = matinv/matinv.o cmateig/cmateig.o
+OBJS = matinv/matinv.o cmateig/cmateig.o dmatmul/dmatmul.o
 LIBS = modules/libmodules.a
 
 run_tests: run_tests.o $(OBJS) $(LIBS)

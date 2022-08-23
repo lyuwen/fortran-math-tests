@@ -33,4 +33,15 @@ program main
     print *, "array_size = ", array_sizes(i), " , average time over ", loop, " loops: ", totaltime / loop
   END DO
 
+  print *, "Testing dmatmul:"
+  DO i = 1, size(array_sizes)
+    totaltime = 0
+    DO j = 1, loop
+      singletime = 0
+      call dmatmul(array_sizes(i), singletime, 1)
+      totaltime = totaltime + singletime
+    END DO
+    print *, "array_size = ", array_sizes(i), " , average time over ", loop, " loops: ", totaltime / loop
+  END DO
+
 end program main

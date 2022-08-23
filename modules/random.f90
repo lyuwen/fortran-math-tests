@@ -1,3 +1,21 @@
+subroutine get_random_double_array(array_size, array)
+  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  !                                          !
+  ! Generate a random double precision array !
+  !                                          !
+  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  IMPLICIT NONE
+  INTEGER,PARAMETER :: dp=kind(1.d0)
+  INTEGER :: seed
+  INTEGER,INTENT(IN) :: array_size
+  REAL(dp), INTENT(INOUT) :: array(array_size, array_size)
+  !
+  seed = 0
+  call random_seed(seed)
+  call random_number(array)
+end subroutine get_random_double_array
+
+
 subroutine get_random_double_invertable_array(array_size, array)
   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   !                                                             !
@@ -6,19 +24,14 @@ subroutine get_random_double_invertable_array(array_size, array)
   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   IMPLICIT NONE
   INTEGER,PARAMETER :: dp=kind(1.d0)
-  INTEGER :: seed
   INTEGER,INTENT(IN) :: array_size
   REAL(dp), INTENT(INOUT) :: array(array_size, array_size)
 #ifdef USE_DGEMM
   REAL(dp) :: temp(array_size, array_size)
-#endif
-  INTEGER :: M,N,P
-  REAL(dp), ALLOCATABLE :: MB(:,:), MC(:,:)
   REAL(dp), parameter :: ALPHA=1.0, BETA=0.0
+#endif
   !
-  seed = 0
-  call random_seed(seed)
-  call random_number(array)
+  call get_random_double_array(array_size, array)
 #ifdef USE_DGEMM
   CALL DGEMM('N','N',array_size,array_size,array_size,ALPHA,transpose(array),array_size,array,array_size,BETA,temp,array_size)
   array = temp / array_size * 100
@@ -29,6 +42,29 @@ subroutine get_random_double_invertable_array(array_size, array)
 end subroutine get_random_double_invertable_array
 
 
+subroutine get_random_complex_array(array_size, array)
+  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  !                                           !
+  ! Generate a random complex precision array !
+  !                                           !
+  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  IMPLICIT NONE
+  INTEGER,PARAMETER :: dp=kind(1.d0)
+  INTEGER :: seed
+  INTEGER,INTENT(IN) :: array_size
+  COMPLEX(dp), INTENT(INOUT) :: array(array_size, array_size)
+  REAL(dp), ALLOCATABLE :: temp(:, :)
+  !
+  allocate(temp(array_size, array_size))
+  call get_random_double_array(array_size, temp)
+  array(:, :) = 0
+  array = array + temp * CMPLX(1.0, 0.0)
+  call get_random_double_array(array_size, temp)
+  array = array + temp * CMPLX(0.0, 1.0)
+  deallocate(temp)
+end subroutine get_random_complex_array
+
+
 subroutine get_random_complex_hermitian_array(array_size, array)
   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   !                                                                    !
@@ -37,21 +73,11 @@ subroutine get_random_complex_hermitian_array(array_size, array)
   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   IMPLICIT NONE
   INTEGER,PARAMETER :: dp=kind(1.d0)
-  INTEGER :: seed
   INTEGER,INTENT(IN) :: array_size
   COMPLEX(dp), INTENT(INOUT) :: array(array_size, array_size)
   COMPLEX(dp), ALLOCATABLE :: ctemp(:, :)
-  REAL(dp), ALLOCATABLE :: temp(:, :)
   !
-  seed = 0
-  call random_seed(seed)
-  allocate(temp(array_size, array_size))
-  call random_number(temp)
-  array(:, :) = 0
-  array = array + temp * CMPLX(1.0, 0.0)
-  call random_number(temp)
-  array = array + temp * CMPLX(0.0, 1.0)
-  deallocate(temp)
+  call get_random_complex_array(array_size, array)
   allocate(ctemp(array_size, array_size))
   ctemp = TRANSPOSE(array)
   array = (array + CONJG(ctemp)) * 50d0

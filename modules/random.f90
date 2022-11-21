@@ -43,11 +43,11 @@ end subroutine get_random_double_invertable_array
 
 
 subroutine get_random_complex_array(array_size, array)
-  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-  !                                           !
-  ! Generate a random complex precision array !
-  !                                           !
-  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  !                                                  !
+  ! Generate a random complex double precision array !
+  !                                                  !
+  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   IMPLICIT NONE
   INTEGER,PARAMETER :: dp=kind(1.d0)
   INTEGER :: seed
@@ -83,3 +83,31 @@ subroutine get_random_complex_hermitian_array(array_size, array)
   array = (array + CONJG(ctemp)) * 50d0
   deallocate(ctemp)
 end subroutine get_random_complex_hermitian_array
+
+
+subroutine get_random_complex_invertable_hermitian_array(array_size, array)
+  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  !                                                                                   !
+  ! Generate a random complex double precision array that is hermitian and invertable !
+  !                                                                                   !
+  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  IMPLICIT NONE
+  INTEGER,PARAMETER :: dp=kind(1.d0)
+  INTEGER :: seed
+  INTEGER,INTENT(IN) :: array_size
+  COMPLEX(dp), INTENT(INOUT) :: array(array_size, array_size)
+  REAL(dp), ALLOCATABLE :: temp(:, :)
+  COMPLEX(dp), ALLOCATABLE :: ctemp(:, :)
+  !
+  allocate(temp(array_size, array_size))
+  call get_random_double_invertable_array(array_size, temp)
+  array(:, :) = 0
+  array = array + temp * CMPLX(1.0, 0.0)
+  call get_random_double_invertable_array(array_size, temp)
+  array = array + temp * CMPLX(0.0, 1.0)
+  deallocate(temp)
+  allocate(ctemp(array_size, array_size))
+  ctemp = TRANSPOSE(array)
+  array = (array + CONJG(ctemp)) * 50d0
+  deallocate(ctemp)
+end subroutine get_random_complex_invertable_hermitian_array

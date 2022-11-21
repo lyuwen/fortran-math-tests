@@ -1,7 +1,7 @@
 program main
   IMPLICIT NONE
   INTEGER,PARAMETER :: dp=kind(1.d0)
-  INTEGER,PARAMETER :: array_sizes(4) = (/10,100,1000,1200/)
+  INTEGER,PARAMETER :: array_sizes(5) = (/10,100,1000,1200,2000/)
   REAL :: totaltime, singletime
 #ifdef LOOP
   INTEGER,PARAMETER :: loop = LOOP

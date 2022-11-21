@@ -17,7 +17,7 @@ test-all: test
 test: run_tests
 	./$<
 
-OBJS = matinv/matinv.o cmateig/cmateig.o dmatmul/dmatmul.o
+OBJS = matinv/matinv.o cmateig/cmateig.o dmatmul/dmatmul.o cmatinv/cmatinv.f90
 LIBS = modules/libmodules.a
 
 run_tests: run_tests.o $(OBJS) $(LIBS)

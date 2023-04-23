@@ -55,22 +55,30 @@ if(${CMAKE_VERSION} VERSION_LESS "3.18.0")
   add_compile_options("-cpp")
 else()
   set_source_files_properties(
-    run_${base_name}.f90 ${base_name}.f90
+    run_${base_name}.f90 ${base_name}.f90 prun_${base_name}.f90
     PROPERTIES Fortran_PREPROCESS ON
     )
 endif()
 
-list(APPEND ARRSIZES 10 100 1000)
+list(APPEND ARRSIZES 10 100 1000 2000 5000 10000)
 foreach(arrsize IN LISTS ARRSIZES)
   message(STATUS "Array Size = ${arrsize}")
   add_executable(${base_name}-${arrsize}
     run_${base_name}.f90 ${base_name}.f90
     )
+  add_executable(parallel-${base_name}-${arrsize}
+    prun_${base_name}.f90 ${base_name}.f90
+    )
   target_compile_definitions(${base_name}-${arrsize} PRIVATE ARRSIZE=${arrsize})
+  target_compile_definitions(parallel-${base_name}-${arrsize} PRIVATE ARRSIZE=${arrsize})
   add_test(NAME Test_${base_name}_${arrsize}
            COMMAND ${base_name}-${arrsize})
+  add_test(NAME Test_parallel_${base_name}_${arrsize}
+           COMMAND ${base_name}-${arrsize})
   target_link_libraries(${base_name}-${arrsize} PRIVATE "${BLAS_LIBRARIES}" "${LAPACK_LIBRARIES}" modules)
+  target_link_libraries(parallel-${base_name}-${arrsize} PRIVATE "${BLAS_LIBRARIES}" "${LAPACK_LIBRARIES}" modules)
   list(APPEND EXETARGETS ${base_name}-${arrsize})
+  list(APPEND EXETARGETS parallel-${base_name}-${arrsize})
 endforeach()
 
 message(STATUS "Targets to build = ${EXETARGETS}")
